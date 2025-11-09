@@ -72,15 +72,15 @@ pip install torch pillow annoy numpy flask git+https://github.com/openai/CLIP.gi
 ## Usage
 
 ### Database Build
-
+```
 python run.py
-
+```
 *(Ensure your images folder is set properly in run.py)*
 
 ### Start Web Server
-
+```
 python app.py
-
+```
 - Access via browser: [http://localhost:5000](http://localhost:5000)
 - Enter an English description to view matching images.
 
@@ -91,12 +91,6 @@ python app.py
 - Change image folder and DB filenames via `settings.py`
 - Update `search.html` to customize UI design
 - Add your own features: filtering, detailed logs, downloads
-
----
-
-## License
-
-MIT License — see LICENSE file for details
 
 ---
 
