@@ -1,5 +1,5 @@
 from flask import Flask, request, render_template
-from clip_utils import encode_text
+from clip_model import encode_text
 from db_manager import get_annoy_index, query_image_path
 import settings
 
