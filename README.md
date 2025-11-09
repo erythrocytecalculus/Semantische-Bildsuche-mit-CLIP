@@ -27,7 +27,7 @@ A modular Python project for searching images based on natural language descript
 ---
 
 ## Project Structure
-
+```
 ├── app.py # Main web server (Flask)
 ├── run.py # Image encoding and database setup
 ├── clip_utils.py # CLIP embedding functions
@@ -37,7 +37,7 @@ A modular Python project for searching images based on natural language descript
 ├── templates/
 │ └── search.html # Web UI HTML template
 └── README.md # Project documentation
-
+```
 
 ---
 
@@ -54,12 +54,15 @@ A modular Python project for searching images based on natural language descript
 ---
 
 ## Setup
-
+```
 git clone https://your-repo-url
+```
+```
 cd your-repo-folder
-
+```
+```
 pip install torch pillow annoy numpy flask git+https://github.com/openai/CLIP.git
-
+```
 
 1. Prepare a folder of images (jpg, png, jpeg).
 2. Edit `settings.py` to set custom paths, if needed.
@@ -102,8 +105,6 @@ MIT License — see LICENSE file for details
 - OpenAI CLIP: https://github.com/openai/CLIP
 - Annoy: https://github.com/spotify/annoy
 - Flask: https://flask.palletsprojects.com/
-- Modularized and enhanced from coursework, refactored for clarity and extensibility.
-
 ---
 
 ## Example Search
