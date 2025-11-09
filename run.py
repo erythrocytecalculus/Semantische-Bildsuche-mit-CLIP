@@ -1,5 +1,5 @@
 import os
-from image_utils import encode_image
+from clip_model import encode_image
 from db_manager import (
     get_annoy_index, save_annoy_index,
     create_sqlite_db, insert_image_path
