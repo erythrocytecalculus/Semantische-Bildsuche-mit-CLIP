@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Image Search</title>
+</head>
+
+<body>
+    <h1>Describe an Image to Search (English Only)</h1>
+    <form method="POST">
+        <input type="text" name="description" placeholder="Enter image description here" required>
+        <button type="submit">Search</button>
+    </form>
+
+    {% if images %}
+    <h2>Results:</h2>
+    {% for image_path in images %}
+    <img src="{{ image_path }}" width="200" alt="Image result" />
+    {% endfor %}
+    {% endif %}
+</body>
+
+</html>
