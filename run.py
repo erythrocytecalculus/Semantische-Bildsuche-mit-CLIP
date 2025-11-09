@@ -22,4 +22,4 @@ def build_database(image_dir):
 
 if __name__ == '__main__':
     # Update this with your local images folder
-    build_database("path/to/your/image/folder")
+    build_database(r"C:\Users\TUFA17\OneDrive\Desktop\Semantische-Bildsuche-mit-CLIP\static\images")
