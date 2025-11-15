@@ -1,25 +1,44 @@
 import os
-from clip_model import encode_image
-from db_manager import (
-    get_annoy_index, save_annoy_index,
-    create_sqlite_db, insert_image_path
-)
-import settings
+import numpy as np
+from annoy import AnnoyIndex
+from PIL import Image
+import torch
+import clip
+from settings import ANNOY_PATH, SQLITE_PATH, VECTOR_SIZE, ANNOY_TREE_COUNT
+from db_manager import insert_image_embedding
 
-def build_database(image_dir):
-    create_sqlite_db(settings.SQLITE_PATH)
-    annoy_index = get_annoy_index(settings.VECTOR_SIZE)
+device = "cuda" if torch.cuda.is_available() else "cpu"
+model, preprocess = clip.load("ViT-L/14@336px", device=device)
 
-    images = [f for f in os.listdir(image_dir) if f.lower().endswith(('.jpg', '.jpeg', '.png'))]
+image_folder = "static/images"
+image_files = [f for f in os.listdir(image_folder) if f.lower().endswith(('.jpg', '.jpeg', '.png'))]
 
-    for idx, image_name in enumerate(images):
-        full_path = os.path.join(image_dir, image_name)
-        vector = encode_image(full_path)
-        annoy_index.add_item(idx, vector)
-        insert_image_path(settings.SQLITE_PATH, full_path)
+def normalize_vector(vector):
+    """Normalize a vector to unit length."""
+    return vector / np.linalg.norm(vector, axis=1, keepdims=True)
 
-    save_annoy_index(annoy_index, settings.ANNOY_PATH, settings.ANNOY_TREE_COUNT)
+features_list = []
+for imgfile in image_files:
+    image_path = os.path.join(image_folder, imgfile)
+    image = preprocess(Image.open(image_path)).unsqueeze(0).to(device)
+    with torch.no_grad():
+        image_features = model.encode_image(image)
+    image_features = image_features.cpu().numpy()
+    image_features = normalize_vector(image_features)  # Normalize features
+    features_list.append((imgfile, image_features[0]))
 
-if __name__ == '__main__':
-    # Update this with your local images folder
-    build_database(r"C:\Users\TUFA17\OneDrive\Desktop\Semantische-Bildsuche-mit-CLIP\static\images")
+# Insert image embeddings into the SQLite DB
+for imgfile, features in features_list:
+    insert_image_embedding(SQLITE_PATH, os.path.join(image_folder, imgfile), features)
+
+# Build Annoy index
+annoy_index = AnnoyIndex(VECTOR_SIZE, 'angular')
+for idx, (imgfile, features) in enumerate(features_list):
+    annoy_index.add_item(idx, features)
+annoy_index.build(ANNOY_TREE_COUNT)
+annoy_index.save(ANNOY_PATH)
+
+# Optionally, save filenames (index mapping) for later retrieval
+with open("image_index.txt", "w") as f:
+    for imgfile, _ in features_list:
+        f.write(f"{imgfile}\n")
