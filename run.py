@@ -1,44 +1,70 @@
 import os
-import numpy as np
-from annoy import AnnoyIndex
-from PIL import Image
 import torch
 import clip
-from settings import ANNOY_PATH, SQLITE_PATH, VECTOR_SIZE, ANNOY_TREE_COUNT
-from db_manager import insert_image_embedding
+import numpy as np
+from PIL import Image
+import faiss
 
-device = "cuda" if torch.cuda.is_available() else "cpu"
-model, preprocess = clip.load("ViT-L/14@336px", device=device)
+# Function to preprocess images (resize them)
+def preprocess_images(image_folder, output_folder, size=(256, 256)):
+    """Preprocess images: resize and save to the output folder."""
+    if not os.path.exists(output_folder):
+        os.makedirs(output_folder)
 
-image_folder = "static/images"
-image_files = [f for f in os.listdir(image_folder) if f.lower().endswith(('.jpg', '.jpeg', '.png'))]
+    for filename in os.listdir(image_folder):
+        if filename.endswith('.jpg') or filename.endswith('.png'):
+            img_path = os.path.join(image_folder, filename)
+            img = Image.open(img_path)
+            img = img.resize(size)  # Resize the image
+            img.save(os.path.join(output_folder, filename))
 
-def normalize_vector(vector):
-    """Normalize a vector to unit length."""
-    return vector / np.linalg.norm(vector, axis=1, keepdims=True)
+    print(f"Processed images saved to {output_folder}")
 
-features_list = []
-for imgfile in image_files:
-    image_path = os.path.join(image_folder, imgfile)
-    image = preprocess(Image.open(image_path)).unsqueeze(0).to(device)
-    with torch.no_grad():
-        image_features = model.encode_image(image)
-    image_features = image_features.cpu().numpy()
-    image_features = normalize_vector(image_features)  # Normalize features
-    features_list.append((imgfile, image_features[0]))
+# Function to extract CLIP embeddings for each image
+def extract_embeddings(image_folder, output_file="image_embeddings.npy"):
+    """Extract CLIP embeddings for each image and save them to a file."""
+    device = "cuda" if torch.cuda.is_available() else "cpu"
+    model, preprocess = clip.load("ViT-B/32", device=device)
 
-# Insert image embeddings into the SQLite DB
-for imgfile, features in features_list:
-    insert_image_embedding(SQLITE_PATH, os.path.join(image_folder, imgfile), features)
+    embeddings = []
+    for filename in os.listdir(image_folder):
+        if filename.endswith('.jpg') or filename.endswith('.png'):
+            img_path = os.path.join(image_folder, filename)
+            img = preprocess(Image.open(img_path)).unsqueeze(0).to(device)
+            with torch.no_grad():
+                feature = model.encode_image(img)
 
-# Build Annoy index
-annoy_index = AnnoyIndex(VECTOR_SIZE, 'angular')
-for idx, (imgfile, features) in enumerate(features_list):
-    annoy_index.add_item(idx, features)
-annoy_index.build(ANNOY_TREE_COUNT)
-annoy_index.save(ANNOY_PATH)
+            feature = feature.cpu().numpy()[0]
+            feature = feature / np.linalg.norm(feature)  # Normalize the embedding
+            embeddings.append(feature)
 
-# Optionally, save filenames (index mapping) for later retrieval
-with open("image_index.txt", "w") as f:
-    for imgfile, _ in features_list:
-        f.write(f"{imgfile}\n")
+    embeddings = np.array(embeddings)
+    np.save(output_file, embeddings)  # Save embeddings to a file
+    print(f"Embeddings saved to {output_file}")
+
+# Function to build FAISS index
+def build_faiss_index(embeddings_file="image_embeddings.npy", index_file="image_index.faiss"):
+    """Build a FAISS index for the image embeddings and save it."""
+    embeddings = np.load(embeddings_file)
+
+    # Initialize FAISS index (Inner Product: cosine similarity)
+    index = faiss.IndexFlatIP(embeddings.shape[1])
+    faiss.normalize_L2(embeddings)  # Normalize the embeddings
+    index.add(embeddings)  # Add embeddings to the index
+
+    faiss.write_index(index, index_file)  # Save the FAISS index
+    print(f"FAISS index saved to {index_file}")
+
+if __name__ == "__main__":
+    # Set your folders here
+    image_folder = r"C:\Users\TUFA17\[target_dir\validation]"  # e.g., "C:/OpenImages/processed"
+    output_folder = r"C:\Users\TUFA17\[target_dir\resized]"  # e.g., "C:/OpenImages/resized"
+
+    # Preprocess images (resize them)
+    preprocess_images(image_folder, output_folder)
+
+    # Extract embeddings for the resized images
+    extract_embeddings(output_folder, output_file="image_embeddings.npy")
+
+    # Build FAISS index from the embeddings
+    build_faiss_index(embeddings_file="image_embeddings.npy", index_file="image_index.faiss")

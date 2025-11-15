@@ -6,17 +6,19 @@
 </head>
 
 <body>
-    <h1>Describe an Image to Search (English Only)</h1>
+    <h1>Search for an Image</h1>
     <form method="POST">
-        <input type="text" name="query" placeholder="Enter image description here" required>
+        <input type="text" name="query" placeholder="Enter text description" required>
         <button type="submit">Search</button>
     </form>
 
     {% if images %}
-    <h2>Results:</h2>
-    {% for image_path in images %}
-    <img src="{{ image_path }}" width="200" alt="Image result" />
-    {% endfor %}
+    <h2>Search Results:</h2>
+    <div>
+        {% for image_path in images %}
+        <img src="{{ image_path }}" width="200" alt="Image result">
+        {% endfor %}
+    </div>
     {% endif %}
 </body>
 
