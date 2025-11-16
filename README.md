@@ -65,6 +65,7 @@ To use the Open Images dataset, download it from the AWS S3 bucket with the foll
 ```
 aws s3 --no-sign-request sync s3://open-images-dataset/validation open_images/validation
 ```
+This command will download the validation set (approximately 12GB) of the Open Images dataset, which contains 41,620 images. These images will be stored in the open_images/validation folder.
 
 ### Step 2: Clone the repository
 ```
@@ -120,6 +121,14 @@ python app.py
 
 ---
 
+## Example Search
+
+Search Term: "dog playing in the snow"
+- This will return the most relevant images matching the description from the open_images/validation folder.
+<img width="1681" height="837" alt="image" src="https://github.com/user-attachments/assets/6360bc0f-fa6b-4943-9204-a3fc07a099a6" />
+
+---
+
 ## Credits and References
 
 - OpenAI CLIP: https://github.com/openai/CLIP
@@ -131,19 +140,5 @@ python app.py
 - Open Images Dataset: https://github.com/cvdfoundation/open-images-dataset
 
 - Annoy: https://github.com/spotify/annoy
-
----
-
-## Example Search
-
-Search Term: "dog playing in the snow"
-- This will return the most relevant images matching the description from the open_images/validation folder.
-<img width="1681" height="837" alt="image" src="https://github.com/user-attachments/assets/6360bc0f-fa6b-4943-9204-a3fc07a099a6" />
-
----
-
-## Screenshots
-
-(Add screenshots of your web UI or results here for visual appeal!)
 
 ---
