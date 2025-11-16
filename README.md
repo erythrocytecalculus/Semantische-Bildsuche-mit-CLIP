@@ -124,7 +124,7 @@ python app.py
 ## Example Search
 
 Search Term: "dog playing in the snow"
-- This will return the most relevant images matching the description from the open_images/validation folder.
+
 <img width="1681" height="837" alt="image" src="https://github.com/user-attachments/assets/6360bc0f-fa6b-4943-9204-a3fc07a099a6" />
 
 ---
