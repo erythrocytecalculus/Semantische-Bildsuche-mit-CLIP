@@ -57,8 +57,8 @@ def build_faiss_index(embeddings_file="image_embeddings.npy", index_file="image_
 
 if __name__ == "__main__":
     # Set your folders here
-    image_folder = r"C:\Users\TUFA17\[target_dir\validation]"  # e.g., "C:/OpenImages/processed"
-    output_folder = r"C:\Users\TUFA17\[target_dir\resized]"  # e.g., "C:/OpenImages/resized"
+    image_folder = r"C:\Users\TUFA17\OneDrive\Desktop\Semantische-Bildsuche-mit-CLIP\OpenImages\validation"  # e.g., "C:/OpenImages/processed"
+    output_folder = r"C:\Users\TUFA17\OneDrive\Desktop\Semantische-Bildsuche-mit-CLIP\OpenImages\resize"  # e.g., "C:/OpenImages/resized"
 
     # Preprocess images (resize them)
     preprocess_images(image_folder, output_folder)
