@@ -215,3 +215,7 @@ images_vectors.ann
 
 # Ignore image index file
 image_index.txt
+
+OpenImages/
+image_embeddings.npy
+image_index.faiss
