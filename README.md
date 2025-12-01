@@ -30,10 +30,6 @@ A modular Python project that allows you to search for images based on natural l
 ```
 ├── app.py # Main web server (Flask)
 ├── run.py # Image encoding and database setup
-├── clip_model.py # CLIP model embedding functions
-├── db_manager.py # FAISS database management
-├── image_utils.py # Image viewing/copying helpers
-├── settings.py # Configuration variables (VECTOR_SIZE, ANNOY_TREE_COUNT)
 ├── templates/
 │ └── search.html # Web UI HTML template
 ├── open_images/
@@ -79,7 +75,7 @@ cd your-repo-folder
 
 ### Step 4: Install dependencies
 ```
-pip install torch pillow annoy numpy flask git+https://github.com/openai/CLIP.git
+pip install torch pillow faiss numpy flask git+https://github.com/openai/CLIP.git
 ```
 ### Step 5: Configure paths
 
@@ -138,7 +134,5 @@ Search Term: "dog playing in the snow"
 - Flask: https://flask.palletsprojects.com/
 
 - Open Images Dataset: https://github.com/cvdfoundation/open-images-dataset
-
-- Annoy: https://github.com/spotify/annoy
 
 ---
