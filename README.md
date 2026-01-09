@@ -80,7 +80,8 @@ cd your-repo-folder
 
 ### Step 4: Install dependencies
 ```
-pip install torch pillow faiss numpy flask git+https://github.com/openai/CLIP.git
+pip install torch pillow faiss numpy flask git+https://github.com/openai/CLIP.git umap-learn
+
 ```
 ### Step 5: Configure paths
 
