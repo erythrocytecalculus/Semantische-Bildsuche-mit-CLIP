@@ -12,6 +12,7 @@ A modular Python project that allows you to search for images based on natural l
 - **Modular Architecture**: Easy to extend or modify for custom use cases.
 - **Modern Web UI**: A clean and responsive web interface for querying and displaying results.
 - **Customizable**: Simple to adapt to your own dataset or integrate additional features.
+- **UMAP for Visualization**: Visualizes high-dimensional image embeddings in 2D space using **UMAP**. It helps you explore and understand the relationships between images based on their visual features.
 
 ---
 
@@ -21,7 +22,7 @@ A modular Python project that allows you to search for images based on natural l
 - [Requirements](#requirements)
 - [Setup](#setup)
 - [Usage](#usage)
-- [Customization](#customization)
+- [UMAP Visualization](#umap-visualization)
 
 ---
 
@@ -35,6 +36,9 @@ A modular Python project that allows you to search for images based on natural l
 ├── open_images/
 │ ├── resize/ # Resized images for processing
 │ └── validation/ # Validation set of images
+├── umap_interactive.py # UMAP visualization and interactive plot setup
+├── umap_thumbnails.py # Code to add thumbnails to UMAP plot
+├── umap.html # UMAP HTML template for rendering
 └── README.md # Project documentation
 ```
 
@@ -49,6 +53,7 @@ A modular Python project that allows you to search for images based on natural l
 - **flask**
 - **numpy**
 - **OpenAI CLIP** (install via pip and Git)
+- **umap-learn** (for dimensionality reduction)
 
 ---
 
@@ -117,6 +122,19 @@ python app.py
 
 ---
 
+## UMAP Visualization
+
+### Interactive 2D Visualization of CLIP Image Embeddings
+
+This project also includes a **UMAP visualization** of the image embeddings. UMAP (Uniform Manifold Approximation and Projection) reduces the high-dimensional image features (from the CLIP model) to 2D, making it easy to explore the relationships between images visually. The UMAP projection allows you to:
+
+- **Visualize Clusters**: Images that are visually similar will be grouped together.
+- **Hover Over Points**: Display coordinates when hovering over points on the UMAP plot.
+
+To access the UMAP visualization, visit http://127.0.0.1:5000/umap
+
+---
+
 ## Example Search
 
 Search Term: "dog playing in the snow"
@@ -132,6 +150,8 @@ Search Term: "dog playing in the snow"
 - FAISS: https://github.com/facebookresearch/faiss
 
 - Flask: https://flask.palletsprojects.com/
+
+- UMAP: [https://umap-learn.readthedocs.io/](https://umap-learn.readthedocs.io/)
 
 - Open Images Dataset: https://github.com/cvdfoundation/open-images-dataset
 
