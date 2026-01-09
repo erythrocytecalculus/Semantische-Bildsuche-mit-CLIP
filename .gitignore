@@ -205,3 +205,17 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+
+# Ignore SQLite database
+images_db.sqlite
+
+# Ignore Annoy index file
+images_vectors.ann
+
+# Ignore image index file
+image_index.txt
+
+OpenImages/
+image_embeddings.npy
+image_index.faiss
