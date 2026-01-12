@@ -125,6 +125,9 @@ python app.py
 
 ## UMAP Visualization
 
+<img width="1919" height="621" alt="Screenshot 2026-01-09 201237" src="https://github.com/user-attachments/assets/8e10cedd-a3c8-4915-841d-3cfb061596d1" />
+
+
 ### Interactive 2D Visualization of CLIP Image Embeddings
 
 This project also includes a **UMAP visualization** of the image embeddings. UMAP (Uniform Manifold Approximation and Projection) reduces the high-dimensional image features (from the CLIP model) to 2D, making it easy to explore the relationships between images visually. The UMAP projection allows you to:
